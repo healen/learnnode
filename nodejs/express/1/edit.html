@@ -52,39 +52,40 @@
 
 
 	<div class="container-fluid">
-			<h2 class="text-center"> Add User Msg </h2>
+			<h2 class="text-center"> 修改个人信息 </h2>
 			<hr>
 			<form class="form-horizontal">
 				<div class="form-group">
-				    <label for="fristname" class="col-sm-2 control-label">Frist Name</label>
+				    <label for="fristname" class="col-sm-2 control-label">姓氏：</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="frist_name" placeholder="Enter the Frist Name">
+				    	<input type="text" class="form-control" id="frist_name" value="{{frist_name}}">
 				    </div>
 				</div>
 				<div class="form-group">
-				    <label for="lastname" class="col-sm-2 control-label">Last Name</label>
+				    <label for="lastname" class="col-sm-2 control-label">名字：</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="last_name" placeholder=" Enter the Last Name">
-				    </div>
-				</div>
-
-				<div class="form-group">
-				    <label for="job" class="col-sm-2 control-label">Job</label>
-				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="job" placeholder=" Enter the Last Job">
+				    	<input type="text" class="form-control" id="last_name" value="{{last_name}}">
 				    </div>
 				</div>
 
 				<div class="form-group">
-				    <label for="about_me" class="col-sm-2 control-label">About Me</label>
+				    <label for="job" class="col-sm-2 control-label">职业：</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="about_me" placeholder=" Enter the About Me">
+				    	<input type="text" class="form-control" id="job" value="{{job}}">
+				    </div>
+				</div>
+
+				<div class="form-group">
+				    <label for="about_me" class="col-sm-2 control-label">自我介绍</label>
+				    <div class="col-sm-10">
+				    	<textarea class="form-control" id="about_me" placeholder="自我介绍" >{{about_me}}</textarea>
 				    </div>
 				</div>
 				  
 				<div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
-				      <button type="button" class="btn btn-primary" onclick="sendUser()">add user</button>
+				      	<button type="button" class="btn btn-primary" onclick="edit({{user_id}})">修改</button>
+
 				    </div>
 				</div>
 			</form>
@@ -104,11 +105,7 @@
 				return new XMLHttpRequest();
 			}
 		}
-
-
-		
-
-		function sendUser(){
+		function edit(id){
 			xhr=createXMLHttpRequest();
 			var mengceng=document.getElementById('mengceng');
 			var result=document.getElementById('result');
@@ -116,20 +113,24 @@
 				frist_name:document.getElementById('frist_name').value,
 				last_name:document.getElementById('last_name').value,
 				job:document.getElementById('job').value,
-				about_me:document.getElementById('about_me').value
+				about_me:document.getElementById('about_me').value,
+				user_id:id
 			}
 			
 			xhr.onreadystatechange=function(){
-				function hidealert(){
+				function hidealert(callback){
 					setTimeout(function(){
 						mengceng.style.display="none";
 						result.innerHTML="";
+						callback && callback()
 					},1000)
 				}
 				if(xhr.readyState==4 && xhr.status==200){
 					mengceng.style.display="block";
 					result.innerHTML=xhr.responseText;
-					hidealert()
+					hidealert(function(){
+						window.location.href="/list";
+					})
 
 				}else{
 					mengceng.style.display="block";
@@ -137,8 +138,7 @@
 					hidealert()
 				}
 			}
-			xhr.open("post","app5",true)
-			console.log(obj)
+			xhr.open("post","/edit",true)
 			xhr.send(JSON.stringify(obj));
 		}
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+
+	<script type="text/javascript">
+		var tpl="<p> my name is {{name}} old is {{age.age1}} </p>";
+
+
+
+		
+
+		function TemplateEngine(tpl,data){
+			var re = /\{\{([^\}\}]+)?\}\}/g;
+			while(match=re.exec(tpl)){
+				tpl=tpl.replace(match[0],data[match[1]])
+			}
+			return tpl
+		}
+
+		var s = TemplateEngine(tpl,{
+			name:"张晓东",
+			age:{
+				age1:25,
+				age2:26
+			}
+		})
+
+		console.log(s)
+		
+	</script>
+	
+</body>
+</html>
